@@ -9,9 +9,7 @@ import ButtonGroups from "./ButtonGroups";
 const CalculatorWrapper = () => {
   // State to store the current display value
   const [displayValue, setDisplayValue] = useState(0);
-
-  // Reference to track calculation history
-  let inputHistoryRef = useRef("");
+  const [inputHistory, setInputHistory] = useState("")
 
   // References to track last input types
   let lastInputWasEqualsRef = useRef(false);
@@ -19,7 +17,7 @@ const CalculatorWrapper = () => {
 
   // Helper to append to calculation history
   const updateCalculationHistory = (newValue) => {
-    inputHistoryRef.current += newValue;
+    setInputHistory((previousInputHistory) => previousInputHistory + newValue)
   };
 
   // Handle button click based on input type
@@ -37,7 +35,7 @@ const CalculatorWrapper = () => {
     if (numberRegex.test(inputValue) || inputValue === ".") {
       // Reset after equals
       if (lastInputWasEqualsRef.current) {
-        inputHistoryRef.current = inputValue;
+        setInputHistory(inputValue);
         setDisplayValue(inputValue);
         lastInputWasEqualsRef.current = false;
 
@@ -73,8 +71,9 @@ const CalculatorWrapper = () => {
       inputValue === "=" &&
       lastInputWasOperatorRef.current === false
     ) {
-      const result = eval(inputHistoryRef.current);
-      inputHistoryRef.current = result;
+      const result = eval(inputHistory);
+      setInputHistory(result)
+     
 
       setDisplayValue(result);
       lastInputWasEqualsRef.current = true;
@@ -82,7 +81,7 @@ const CalculatorWrapper = () => {
       // Clear Logic
     } else if (inputValue === "c") {
       setDisplayValue(0);
-      inputHistoryRef.current = "";
+      setInputHistory("")
       lastInputWasEqualsRef.current = false;
       lastInputWasOperatorRef.current = false;
     }
@@ -97,7 +96,7 @@ const CalculatorWrapper = () => {
 
       {/* Calculator app starts here */}
       <div className="bg-[#05386b] w-96 mx-auto mt-10 rounded-md drop-shadow-2xl">
-        <ResultScreen displayValue={displayValue} />
+      <ResultScreen displayValue={displayValue} inputHistory={inputHistory} />
         <div className="w-11/12 flex flex-wrap justify-around mx-auto pb-2 ">
           <ButtonGroups onClick={(event) => handleButtonClick(event)} />
         </div>
