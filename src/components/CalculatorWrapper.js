@@ -9,6 +9,7 @@ import ButtonGroups from "./ButtonGroups";
 const CalculatorWrapper = () => {
   // State to store the current display value
   const [displayValue, setDisplayValue] = useState(0);
+  const [inputHistory, setInputHistory] = useState("");
 
   // Reference to track calculation history
   let inputHistoryRef = useRef("");
@@ -47,11 +48,13 @@ const CalculatorWrapper = () => {
         if (lastInputWasOperatorRef.current) {
           setDisplayValue(inputValue);
           updateCalculationHistory(inputValue);
+
           lastInputWasOperatorRef.current = false;
 
           // Append to display
         } else {
           updateCalculationHistory(inputValue);
+
           setDisplayValue((currentDisplayValue) =>
             displayValue === 0 ? inputValue : currentDisplayValue + inputValue
           );
@@ -61,9 +64,11 @@ const CalculatorWrapper = () => {
       // Operators Logic
     } else if (
       operatorsRegex.test(inputValue) &&
-      lastInputWasOperatorRef.current === false
+      lastInputWasOperatorRef.current === false &&
+      inputHistoryRef.current.length != 0
     ) {
       updateCalculationHistory(inputValue);
+      setInputHistory(inputHistoryRef.current);
       lastInputWasOperatorRef.current = true;
       lastInputWasEqualsRef.current = false;
       setDisplayValue("");
@@ -73,15 +78,26 @@ const CalculatorWrapper = () => {
       inputValue === "=" &&
       lastInputWasOperatorRef.current === false
     ) {
-      const result = eval(inputHistoryRef.current);
-      inputHistoryRef.current = result;
-
-      setDisplayValue(result);
-      lastInputWasEqualsRef.current = true;
+      try {
+        setInputHistory(inputHistoryRef.current);
+        const result = eval(inputHistoryRef.current);
+        inputHistoryRef.current = result;
+        setDisplayValue(result);
+        lastInputWasEqualsRef.current = true;
+      } catch (error) {
+       
+        alert("Something didn't add up right! 😅");
+        setDisplayValue(0);
+        setInputHistory("");
+        inputHistoryRef.current = "";
+        lastInputWasEqualsRef.current = false;
+        lastInputWasOperatorRef.current = false;
+      }
 
       // Clear Logic
     } else if (inputValue === "c") {
       setDisplayValue(0);
+      setInputHistory("");
       inputHistoryRef.current = "";
       lastInputWasEqualsRef.current = false;
       lastInputWasOperatorRef.current = false;
@@ -90,14 +106,14 @@ const CalculatorWrapper = () => {
 
   // JSX component markup
   return (
-    <main className="w-screen h-screen ">
-      <h1 className="text-center drop-shadow-sm my-14 tracking-widest">
+    <main className="my-20">
+      <h1 className="text-center drop-shadow-sm  tracking-widest">
         COUNT()
       </h1>
 
       {/* Calculator app starts here */}
       <div className="bg-[#05386b] w-96 mx-auto mt-10 rounded-md drop-shadow-2xl">
-        <ResultScreen displayValue={displayValue} />
+        <ResultScreen result={displayValue} history={inputHistory} />
         <div className="w-11/12 flex flex-wrap justify-around mx-auto pb-2 ">
           <ButtonGroups onClick={(event) => handleButtonClick(event)} />
         </div>

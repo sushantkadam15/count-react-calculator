@@ -1,24 +1,26 @@
 const Footer = () => {
+  return (
+    <footer className="bg-[#05386b] text-[#edf5e1] text-sm tracking-widest py-8 flex justify-around">
+      <p>
+        <a
+          className="hover:text-blue-400"
+          href="https://www.linkedin.com/in/sushant-p-kadam/"
+        >
+          Linkedin
+        </a>
+      </p>
+      <p>Sushant Kadam 👨🏼‍💻</p>
 
-    return (
-      <footer className="bg-gray-800 text-white text-center py-8">
-        
-        <p className="text-lg">
-          Made with love by{' '} 
-          <a className="text-blue-400" href="https://www.linkedin.com/in/sushant-kadam/">
-            Sushant Kadam
-          </a>
-        </p>
-  
-        <p className="text-lg">
-          <a className="text-blue-400" href="https://github.com/sushant-kadam/">
-            GitHub
-          </a>
-        </p>
-  
-      </footer>
-    );
-  
-  };
-  
-  export default Footer;
+      <p>
+        <a
+          className="hover:text-blue-400"
+          href="https://github.com/sushantkadam15"
+        >
+          GitHub
+        </a>
+      </p>
+    </footer>
+  );
+};
+
+export default Footer;
