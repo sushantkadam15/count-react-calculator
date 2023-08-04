@@ -19,7 +19,7 @@ The **Count() Calculator App** is a straightforward calculator application devel
 
 The calculator's interface prominently displays ongoing input values and the outcomes of operations. Numeric buttons facilitate the input of digits. Operator buttons integrate corresponding symbols into both the display and calculations. The equals button triggers computation and exhibits the resulting output. The clear button resets the interface, erasing prior inputs and operations.
 
-![Calculator Preview](/path/to/calculator-screenshot.png)
+![Calculator Preview](https://count-calculator-react.netlify.app/app-preview.png)
 
 ## Development
 
